@@ -9,7 +9,7 @@
 { # This ensures the entire script is downloaded #
 
 # Config.
-VERSION="1.0.0"
+VERSION="1.1.0"
 
 # Colors.
 COLOR_PREFIX="\x1b["
