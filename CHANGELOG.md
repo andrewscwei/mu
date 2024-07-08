@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/andrewscwei/mu/compare/v1.1.0...v1.1.1) (2024-07-08)
+
+
+### Bug Fixes
+
+* Update install script ([8e7c209](https://github.com/andrewscwei/mu/commit/8e7c209ff262de1534b56ebebb2679ce6d156a81))
+
 # [1.1.0](https://github.com/andrewscwei/mu/compare/v1.0.0...v1.1.0) (2024-07-08)
 
 
