@@ -631,6 +631,7 @@ function cmd_untag() {
 
   git tag -d $1
   git push -d origin $1
+  gh release delete $1 -y
 }
 
 # Creates a local branch from the provided title, pushes it to remote and
