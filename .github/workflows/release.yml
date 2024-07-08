@@ -21,7 +21,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 21
-          cache: npm
       - name: Release semantic version
         run: |
           npm i -g semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/exec
