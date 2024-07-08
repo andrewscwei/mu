@@ -1,0 +1,35 @@
+{
+  "branches": [
+    "master"
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "sed -i 's/VERSION=\"[^\"]*\"/VERSION=\"'${nextRelease.version}'\"/' install.sh && sed -i 's/VERSION=\"[^\"]*\"/VERSION=\"'${nextRelease.version}'\"/' mu.sh && sed -i 's|\\(https://raw.githubusercontent.com/andrewscwei/mu/v\\)[^\"/]*\\(/install.sh\\)|\\1'${nextRelease.version}'\\2|' README.md"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "install.sh",
+          "mu.sh",
+          "CHANGELOG.md",
+          "README.md"
+        ],
+        "message": "chore: Release `v${nextRelease.version}` [skip ci]"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "successComment": false,
+        "failComment": false
+      }
+    ]
+  ]
+}

@@ -1,0 +1,27 @@
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon\r
+*~
+
+# Keys
+*.pem
+*.crt
+*.key
+
+# Temporary files
+.tmp/
+
+# Cache files
+.cache/
+
+# Secrets
+*.secret
+
+# mu resources
+registry
+registry-cache
