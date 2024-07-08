@@ -111,10 +111,10 @@ function main() {
     fi
   fi
 
+  echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}Installation complete. Close and reopen your terminal to start using ${COLOR_BLUE}mu${COLOR_RESET}"
+
   # Source mu
   \. "$dest/mu.sh"
-
-  echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}Installation complete. Close and reopen your terminal to start using ${COLOR_BLUE}mu${COLOR_RESET}"
 }
 
 main
