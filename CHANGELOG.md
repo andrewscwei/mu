@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/andrewscwei/mu/compare/v1.1.2...v1.2.0) (2024-07-08)
+
+
+### Features
+
+* Update install script messages ([4c1ee11](https://github.com/andrewscwei/mu/commit/4c1ee11d2b312ebefbe908f1fcc5b3563d58ef4f))
+
 ## [1.1.2](https://github.com/andrewscwei/mu/compare/v1.1.1...v1.1.2) (2024-07-08)
 
 
