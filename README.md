@@ -13,13 +13,25 @@ First you need to teach `mu` where to look for your projects:
 
 From now on you can just run `mu cd <project_key>` to navigate to that project directly from Terminal. Better yet, you can run `mu project <project_key>` (or `mu p <project_key>` for short) to immediate open it with your default text editor (`mu` scans for Xcode project files and Android Studio projects first then falls back to VSCode/Sublime/Atom/TextMate respectively, depending on which editor is installed in your system).
 
-## Usage
+## Install
 
 Install mu via cURL:
 
 ```sh
 $ curl -o- https://raw.githubusercontent.com/andrewscwei/mu/v1.0.0/install.sh | bash
 ```
+
+## Uninstall
+
+1. Remove `.mu` from home directory:
+   ```sh
+   $ rm -rf ~/.mu
+   ```
+2. Remove line `alias mu='. /<HOME_DIR>/.mu/mu.sh'` from any of the following profile config files:
+   1. `~/.bashrc`
+   2. `~/.profile`
+   3. `~/.bash_profile`
+   4. `~/.zshrc`
 
 ## Commands
 

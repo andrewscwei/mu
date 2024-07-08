@@ -608,7 +608,7 @@ elif [[ "$1" == "cd" ]];                                                   then 
 elif [[ "$1" == "clean" ]];                                                then cmd_clean $2
 elif [[ "$1" == "gist" ]];                                                 then cmd_gist $2
 elif [[ "$1" == "list" ]] || [[ "$1" == "ls" ]] || [[ "$1" == "l" ]];      then cmd_list $2
-elif [[ "$1" == "edit" ]]                                                  then cmd_edit_registry $2
+elif [[ "$1" == "edit" ]];                                                 then cmd_edit_registry $2
 elif [[ "$1" == "open" ]] || [[ "$1" == "o" ]];                            then cmd_open $2
 elif [[ "$1" == "remove" ]] || [[ "$1" == "rm" ]] || [[ "$1" == "r" ]];    then cmd_remove $2
 elif [[ "$1" == "project" ]] || [[ "$1" == "p" ]];                         then cmd_project $2
