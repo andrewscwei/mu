@@ -18,7 +18,7 @@ From now on you can just run `mu cd <project_key>` to navigate to that project d
 Install mu via cURL:
 
 ```sh
-$ curl -o- https://raw.githubusercontent.com/andrewscwei/mu/v1.2.0/install.sh | bash
+$ curl -o- https://raw.githubusercontent.com/andrewscwei/mu/v1.3.0/install.sh | bash
 ```
 
 ## Uninstall

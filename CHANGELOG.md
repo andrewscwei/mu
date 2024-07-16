@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/andrewscwei/mu/compare/v1.2.0...v1.3.0) (2024-07-16)
+
+
+### Features
+
+* Remove PR command ([ee169d2](https://github.com/andrewscwei/mu/commit/ee169d28d97eef2006a4abc7d32024cd0fcb50c3))
+
 # [1.2.0](https://github.com/andrewscwei/mu/compare/v1.1.2...v1.2.0) (2024-07-08)
 
 
