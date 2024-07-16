@@ -12,16 +12,18 @@
 VERSION="1.2.0"
 
 # Colors.
-COLOR_PREFIX="\x1b["
-COLOR_RESET=$COLOR_PREFIX"0m"
-COLOR_BLACK=$COLOR_PREFIX"0;30m"
-COLOR_RED=$COLOR_PREFIX"0;31m"
-COLOR_GREEN=$COLOR_PREFIX"0;32m"
-COLOR_ORANGE=$COLOR_PREFIX"0;33m"
-COLOR_BLUE=$COLOR_PREFIX"0;34m"
-COLOR_PURPLE=$COLOR_PREFIX"0;35m"
-COLOR_CYAN=$COLOR_PREFIX"0;36m"
-COLOR_LIGHT_GRAY=$COLOR_PREFIX"0;37m"
+FMT_PREFIX="\x1b["
+BOLD="${FMT_PREFIX}1m"
+BOLD_RESET="${FMT_PREFIX}1m"
+COLOR_RESET=$FMT_PREFIX"0m"
+COLOR_BLACK=$FMT_PREFIX"0;30m"
+COLOR_RED=$FMT_PREFIX"0;31m"
+COLOR_GREEN=$FMT_PREFIX"0;32m"
+COLOR_ORANGE=$FMT_PREFIX"0;33m"
+COLOR_BLUE=$FMT_PREFIX"0;34m"
+COLOR_PURPLE=$FMT_PREFIX"0;35m"
+COLOR_CYAN=$FMT_PREFIX"0;36m"
+COLOR_LIGHT_GRAY=$FMT_PREFIX"0;37m"
 
 # Paths.
 PATH_ROOT=$(dirname ${BASH_SOURCE[0]-$0})
@@ -234,9 +236,10 @@ function cmd_cache() {
 #             current directory.
 function cmd_add() {
   if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}add <project_alias>${COLOR_RESET} (alias: ${COLOR_CYAN}a${COLOR_RESET})"
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}add ${COLOR_PURPLE}<project_alias>${COLOR_RESET} (alias: ${COLOR_CYAN}a${COLOR_RESET})"
     echo
-    echo -e "Maps the current working directory to <project_alias>. If there already exists a project with the same key, its working directory will be replaced."
+    echo -e "Maps the current working directory to ${COLOR_PURPLE}<project_alias>${COLOR_RESET}. If there already exists a project"
+    echo -e "with the same key, its working directory will be replaced."
     return
   fi
 
@@ -270,9 +273,9 @@ function cmd_add() {
 
   if [[ $check == 0 ]]; then
     buffer="$buffer$key:${dir}\n"
-    echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Mapped ${COLOR_CYAN}$key ${COLOR_RESET}to ${COLOR_CYAN}${dir}${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Mapped ${${COLOR_PURPLE}}$key ${COLOR_RESET}to ${${COLOR_PURPLE}}${dir}${COLOR_RESET}"
   else
-    echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Remapped ${COLOR_CYAN}$key${COLOR_RESET} to ${COLOR_CYAN}${dir}${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Remapped ${${COLOR_PURPLE}}$key${COLOR_RESET} to ${${COLOR_PURPLE}}${dir}${COLOR_RESET}"
   fi
 
   echo -e $buffer >|$PATH_REPOSITORY
@@ -288,9 +291,9 @@ function cmd_add() {
 # @param $1 Project key or index
 function cmd_cd() {
   if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}cd <project_alias_or_index>${COLOR_RESET}"
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}cd ${COLOR_PURPLE}<project_alias_or_index>${COLOR_RESET}"
     echo
-    echo -e "Changes the current working directory to that of the specified ${COLOR_CYAN}<project_alias_or_index>${COLOR_RESET}."
+    echo -e "Changes the current working directory to that of the specified ${COLOR_PURPLE}<project_alias_or_index>${COLOR_RESET}."
     return
   fi
 
@@ -308,13 +311,13 @@ function cmd_cd() {
     return
   fi
 
-  echo -e "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Project with reference ${COLOR_CYAN}$1${COLOR_RESET} not found"
+  echo -e "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Project with reference ${${COLOR_PURPLE}}$1${COLOR_RESET} not found"
 }
 
 # Tidies up the registry file, removing blank lines and fixing bad formatting.
 function cmd_clean() {
   if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}clean${COLOR_RESET}"
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}clean${COLOR_RESET}"
     echo
     echo -e "Scans the registry and reconsiles invalid project entries."
     return
@@ -342,13 +345,13 @@ function cmd_clean() {
   done
 
   echo -e $buffer >|$PATH_REPOSITORY
-  echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Reconciled $count project(s)"
+  echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Reconciled ${COLOR_PURPLE}$count${COLOR_RESET} project(s)"
 }
 
 # Lists all the projects in the registry.
 function cmd_list() {
   if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}list${COLOR_RESET} (aliases: ${COLOR_CYAN}ls${COLOR_RESET}, ${COLOR_CYAN}l${COLOR_RESET})"
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}list${COLOR_RESET} (aliases: ${COLOR_CYAN}ls${COLOR_RESET}, ${COLOR_CYAN}l${COLOR_RESET})"
     echo
     echo -e "Lists all the current projects in the registry."
     return
@@ -385,7 +388,7 @@ function cmd_list() {
 # Edits the local registry.
 function cmd_edit_registry() {
   if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}edit${COLOR_RESET}"
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}edit${COLOR_RESET}"
     echo
     echo -e "Edits the registry file directly in the default text editor ${COLOR_PURPLE}(USE WITH CAUTION)${COLOR_RESET}."
     return
@@ -400,13 +403,9 @@ function cmd_edit_registry() {
 # @param $1 Project key or index
 function cmd_open() {
   if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}open <project_alias_or_index>${COLOR_RESET} (aliases: ${COLOR_CYAN}o${COLOR_RESET})"
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}open ${COLOR_PURPLE}<project_alias_or_index>${COLOR_RESET} (aliases: ${COLOR_CYAN}o${COLOR_RESET})"
     echo
-    echo -e "Opens a project in Finder specified by ${COLOR_CYAN}<project_alias_or_index>${COLOR_RESET} from the registry."
-    return
-  fi
-  if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_RESET}No help data available regarding ${COLOR_RED}$1${COLOR_RESET} at this point"
+    echo -e "Opens a project in Finder specified by ${COLOR_PURPLE}<project_alias_or_index>${COLOR_RESET} from the registry."
     return
   fi
 
@@ -423,9 +422,9 @@ function cmd_open() {
     if [[ $TMP_PROJECT_ALIAS != "" ]]; then
       set_cache $TMP_PROJECT_ALIAS
       open "$TMP_PROJECT_PATH"
-      echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Opened project ${COLOR_CYAN}$TMP_PROJECT_ALIAS${COLOR_RESET} in Finder"
+      echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Opened project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} in Finder"
     else
-      echo -e "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Project with reference ${COLOR_CYAN}$1${COLOR_RESET} not found"
+      echo -e "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Project with reference ${COLOR_PURPLE}$1${COLOR_RESET} not found"
     fi
   else
     echo -e "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}This command is only available in macOS"
@@ -439,9 +438,9 @@ function cmd_open() {
 #           the current directory.
 function cmd_remove() {
   if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}remove <project_alias_or_index>${COLOR_RESET} (aliases: ${COLOR_CYAN}rm${COLOR_RESET}, ${COLOR_CYAN}r${COLOR_RESET})"
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}remove ${COLOR_PURPLE}<project_alias_or_index>${COLOR_RESET} (aliases: ${COLOR_CYAN}rm${COLOR_RESET}, ${COLOR_CYAN}r${COLOR_RESET})"
     echo
-    echo -e "Removes a project specified by ${COLOR_CYAN}<project_alias_or_index>${COLOR_RESET} from the registry."
+    echo -e "Removes a project specified by ${${COLOR_PURPLE}}<project_alias_or_index>${COLOR_RESET} from the registry."
     return
   fi
 
@@ -471,14 +470,14 @@ function cmd_remove() {
       skip=1
       removed=1
 
-      echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Removed project ${COLOR_CYAN}$TMP_PROJECT_ALIAS${COLOR_RESET} at index ${COLOR_PURPLE}$i${COLOR_RESET}"
+      echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Removed project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} at index ${COLOR_PURPLE}$i${COLOR_RESET}"
 
       # Else if arg is a project key...
     elif (($use_idx == 0)) && [ "$TMP_PROJECT_ALIAS" == "$key" ]; then
       skip=1
       removed=1
 
-      echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Removed project ${COLOR_CYAN}$TMP_PROJECT_ALIAS${COLOR_RESET} at index ${COLOR_PURPLE}$i${COLOR_RESET}"
+      echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Removed project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} at index ${COLOR_PURPLE}$i${COLOR_RESET}"
     fi
 
     # If there was no match for this loop...
@@ -492,7 +491,7 @@ function cmd_remove() {
     if (($use_idx == 1)); then
       echo -e "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Index ${COLOR_PURPLE}$key${COLOR_RESET} is out of bounds"
     else
-      echo -e "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Project with key ${COLOR_CYAN}$key${COLOR_RESET} not found"
+      echo -e "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Project with key ${COLOR_PURPLE}$key${COLOR_RESET} not found"
     fi
   fi
 
@@ -505,9 +504,11 @@ function cmd_remove() {
 # @param $1 Project key or index
 function cmd_project() {
   if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}project <project_alias_or_index>${COLOR_RESET} (alias: ${COLOR_CYAN}p${COLOR_RESET})"
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}project ${COLOR_PURPLE}<project_alias_or_index>${COLOR_RESET} (alias: ${COLOR_CYAN}p${COLOR_RESET})"
     echo
-    echo -e "Opens a project specified by ${COLOR_CYAN}<project_alias_or_index>${COLOR_RESET} in its intended IDE. The following IDEs will be scanned: Xcode, Android Studio, Sublime, Atom and TextMate. If an IDE cannot be inferred, this command will be ignored."
+    echo -e "Opens a project specified by ${COLOR_PURPLE}<project_alias_or_index>${COLOR_RESET} in its intended IDE. The following"
+    echo -e "IDEs will be scanned: Xcode, Android Studio, Sublime, Atom and TextMate. If an IDE cannot"
+    echo -e "be inferred, this command will be ignored."
     return
   fi
 
@@ -530,7 +531,7 @@ function cmd_project() {
         # If *.sublime-project is found, store it temporarily until another
         # project file with higher priority is found.
       elif [[ "$file" == *".gradle" ]]; then
-        echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Android Studio project, opening project ${COLOR_CYAN}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_CYAN}Android Studio${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Android Studio project, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_PURPLE}Android Studio${COLOR_RESET}"
         open -a /Applications/Android\ Studio.app $TMP_PROJECT_PATH
         return
       elif [[ "$file" == *"sublime-project" ]]; then
@@ -544,45 +545,45 @@ function cmd_project() {
       set_cache $TMP_PROJECT_ALIAS
 
       if [[ "$TARGET_PROJECT_FILE" == *"xcworkspace" ]]; then
-        echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Xcode workspace, opening project ${COLOR_CYAN}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_CYAN}Xcode${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Xcode workspace, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_PURPLE}Xcode${COLOR_RESET}"
       elif [[ "$TARGET_PROJECT_FILE" == *"xcodeproj" ]]; then
-        echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Xcode project, opening project ${COLOR_CYAN}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_CYAN}Xcode${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Xcode project, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_PURPLE}Xcode${COLOR_RESET}"
       elif [[ "$TARGET_PROJECT_FILE" == *"sublime-project" ]]; then
-        echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Sublime project, opening project ${COLOR_CYAN}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_CYAN}Sublime${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Sublime project, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_PURPLE}Sublime${COLOR_RESET}"
       fi
 
       open "$TARGET_PROJECT_FILE"
     else
       set_cache $TMP_PROJECT_ALIAS
-      echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}No unique project files found, opening project ${COLOR_CYAN}$TMP_PROJECT_ALIAS${COLOR_RESET} in preferred editor"
+      echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}No unique project files found, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} in preferred editor"
       open_in_editor "$TMP_PROJECT_PATH"
     fi
 
     return
   fi
 
-  echo -e "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Project with reference ${COLOR_CYAN}$2${COLOR_RESET} not found"
+  echo -e "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Project with reference ${COLOR_PURPLE}$2${COLOR_RESET} not found"
 }
 
 # Displays the directory.
 function cmd_directory() {
   echo
-  echo -e "Usage: ${COLOR_BLUE}mu ${COLOR_CYAN}<command>${COLOR_RESET} or ${COLOR_BLUE}mu ${COLOR_CYAN}<command> -h${COLOR_RESET} for more info"
+  echo -e "${BOLD}Usage:${BOLD_RESET} ${COLOR_BLUE}mu ${COLOR_CYAN}<command> ${COLOR_PURPLE}[args]${COLOR_RESET} or ${COLOR_BLUE}mu ${COLOR_CYAN}<command> ${COLOR_PURPLE}-h${COLOR_RESET} for more info"
   echo
-  echo -e "where ${COLOR_CYAN}<command>${COLOR_RESET} is one of:"
-  echo -e "${COLOR_CYAN}        add${COLOR_RESET} - Maps the current working directory to a project key (alias: ${COLOR_CYAN}a${COLOR_RESET})"
-  echo -e "${COLOR_CYAN}         cd${COLOR_RESET} - Changes the current working directory to the working directory of a project"
-  echo -e "${COLOR_CYAN}      clean${COLOR_RESET} - Cleans the registry by reconciling invalid entries"
-  echo -e "${COLOR_CYAN}       edit${COLOR_RESET} - Edits the registry file directly in the default text editor ${COLOR_PURPLE}(USE WITH CAUTION)${COLOR_RESET}"
-  echo -e "${COLOR_CYAN}       help${COLOR_RESET} - Provides access to additional info regarding specific commands (alias: ${COLOR_CYAN}h${COLOR_RESET})"
-  echo -e "${COLOR_CYAN}       list${COLOR_RESET} - Lists all current projects in the registry (aliases: ${COLOR_CYAN}ls${COLOR_RESET}, ${COLOR_CYAN}l${COLOR_RESET})"
-  echo -e "${COLOR_CYAN}    project${COLOR_RESET} - Opens a project in intended IDE (alias: ${COLOR_CYAN}p${COLOR_RESET})"
-  echo -e "${COLOR_CYAN}     remove${COLOR_RESET} - Removes a project from the registry (aliases: ${COLOR_CYAN}rm${COLOR_RESET}, ${COLOR_CYAN}r${COLOR_RESET})"
+  echo -e "${BOLD}Main Commands:${BOLD_RESET}"
+  echo -e "${COLOR_CYAN}  add${COLOR_RESET}      Maps the current working directory to a project key (alias: ${COLOR_CYAN}a${COLOR_RESET})"
+  echo -e "${COLOR_CYAN}  cd${COLOR_RESET}       Changes the current working directory to the working directory of a project"
+  echo -e "${COLOR_CYAN}  clean${COLOR_RESET}    Cleans the registry by reconciling invalid entries"
+  echo -e "${COLOR_CYAN}  edit${COLOR_RESET}     Edits the registry file directly in the default text editor ${COLOR_PURPLE}(USE WITH CAUTION)${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}  help${COLOR_RESET}     Provides access to additional info regarding specific commands (alias: ${COLOR_CYAN}h${COLOR_RESET})"
+  echo -e "${COLOR_CYAN}  list${COLOR_RESET}     Lists all current projects in the registry (aliases: ${COLOR_CYAN}ls${COLOR_RESET}, ${COLOR_CYAN}l${COLOR_RESET})"
+  echo -e "${COLOR_CYAN}  project${COLOR_RESET}  Opens a project in intended IDE (alias: ${COLOR_CYAN}p${COLOR_RESET})"
+  echo -e "${COLOR_CYAN}  remove${COLOR_RESET}   Removes a project from the registry (aliases: ${COLOR_CYAN}rm${COLOR_RESET}, ${COLOR_CYAN}r${COLOR_RESET})"
   echo
-  echo -e "  GitHub:"
-  echo -e "${COLOR_CYAN}       gist${COLOR_RESET} - Downloads all files from a gist to the working directory"
-  echo -e "${COLOR_CYAN}        tag${COLOR_RESET} - Creates a tag in both local and remote Git repository"
-  echo -e "${COLOR_CYAN}      untag${COLOR_RESET} - Deletes a tag from both local and remote Git repository"
+  echo -e "${BOLD}GitHub Commands:${BOLD_RESET}"
+  echo -e "${COLOR_CYAN}  gist${COLOR_RESET}     Downloads all files from a gist to the working directory"
+  echo -e "${COLOR_CYAN}  tag${COLOR_RESET}      Creates a tag in both local and remote Git repository"
+  echo -e "${COLOR_CYAN}  untag${COLOR_RESET}    Deletes a tag from both local and remote Git repository"
 }
 
 # Downloads all files from a Gist to the working directory individually. This
@@ -593,9 +594,9 @@ function cmd_directory() {
 # @see https://stedolan.github.io/jq/
 function cmd_gist() {
   if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}gist <url>${COLOR_RESET}"
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}gist <url>${COLOR_RESET}"
     echo
-    echo -e "Downloads all the files from a Gist as specified by ${COLOR_CYAN}<url>${COLOR_RESET} to the working directory."
+    echo -e "Downloads all the files from a Gist as specified by ${COLOR_PURPLE}<url>${COLOR_RESET} to the working directory."
     return
   fi
 
@@ -607,9 +608,9 @@ function cmd_gist() {
 # @param $1 The tag to create.
 function cmd_tag() {
   if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}tag <tag>${COLOR_RESET}"
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}tag ${COLOR_PURPLE}<tag>${COLOR_RESET}"
     echo
-    echo -e "Creates a ${COLOR_CYAN}<tag>${COLOR_RESET} in local and remote Git repository."
+    echo -e "Creates a ${COLOR_PURPLE}<tag>${COLOR_RESET} in local and remote Git repository."
     return
   fi
 
@@ -622,9 +623,9 @@ function cmd_tag() {
 # @param $1 The tag to delete.
 function cmd_untag() {
   if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}untag <tag>${COLOR_RESET}"
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}untag ${COLOR_PURPLE}<tag>${COLOR_RESET}"
     echo
-    echo -e "Deletes ${COLOR_CYAN}<tag>${COLOR_RESET} from local and remote Git repository."
+    echo -e "Deletes ${COLOR_PURPLE}<tag>${COLOR_RESET} from local and remote Git repository."
     return
   fi
 

@@ -36,20 +36,22 @@ $ curl -o- https://raw.githubusercontent.com/andrewscwei/mu/v1.2.0/install.sh | 
 ## Commands
 
 ```sh
-Usage: mu <command> or mu <command> -h for more info
+Usage: mu <command> [args] or mu <command> -h for more info
 
-where <command> is one of:
-        add - Maps the current working directory to a project key (alias: a)
-         cd - Changes the current working directory to the working directory of a project
-      clean - Cleans the registry by reconciling invalid entries
-       edit - Edits the registry file directly in the default text editor (USE WITH CAUTION)
-       help - Provides access to additional info regarding specific commands (alias: h)
-       list - Lists all current projects in the registry (aliases: ls, l)
-    project - Opens a project in intended IDE (alias: p)
-     remove - Removes a project from the registry (aliases: rm, r)
+Main Commands:
+  add      Maps the current working directory to a project key (alias: a)
+  cd       Changes the current working directory to the working directory of a project
+  clean    Cleans the registry by reconciling invalid entries
+  edit     Edits the registry file directly in the default text editor (USE WITH CAUTION)
+  help     Provides access to additional info regarding specific commands (alias: h)
+  list     Lists all current projects in the registry (aliases: ls, l)
+  project  Opens a project in intended IDE (alias: p)
+  remove   Removes a project from the registry (aliases: rm, r)
 
-  GitHub:
-       gist - Downloads all files from a gist to the working directory
+GitHub Commands:
+  gist     Downloads all files from a gist to the working directory
+  tag      Creates a tag in both local and remote Git repository
+  untag    Deletes a tag from both local and remote Git repository
 ```
 
 ### `mu add <project_key>`
