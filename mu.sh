@@ -581,7 +581,6 @@ function cmd_directory() {
   echo
   echo -e "  GitHub:"
   echo -e "${COLOR_CYAN}       gist${COLOR_RESET} - Downloads all files from a gist to the working directory"
-  echo -e "${COLOR_CYAN}         pr${COLOR_RESET} - Creates a local branch from the provided title, pushes it to remote and creates a PR from it with the same title"
   echo -e "${COLOR_CYAN}        tag${COLOR_RESET} - Creates a tag in both local and remote Git repository"
   echo -e "${COLOR_CYAN}      untag${COLOR_RESET} - Deletes a tag from both local and remote Git repository"
 }
@@ -634,32 +633,6 @@ function cmd_untag() {
   gh release delete $1 -y
 }
 
-# Creates a local branch from the provided title, pushes it to remote and
-# creates a PR from it with the same title.
-#
-# @param $1 The title of the PR.
-function cmd_pr() {
-  if [[ "$1" == "-h" ]]; then
-    echo -e "${COLOR_PURPLE}HELP: ${COLOR_BLUE}mu ${COLOR_CYAN}pr <title>${COLOR_RESET}"
-    echo
-    echo -e "Creates a new local branch derived from ${COLOR_CYAN}<title>${COLOR_RESET}, pushes it to remote and creates a PR from it with the same ${COLOR_CYAN}<title>${COLOR_RESET}."
-    return
-  fi
-
-  local branch_name=$(echo "$1" |
-    sed 's/\([^:]*\):\{0,1\} \{0,1\}\(.*\)/\1\/\2/' | # Parse type
-    tr '[:upper:]' '[:lower:]' | # Convert to lowercase
-    tr -s ' ' | # Comporess consecutive spaces into one
-    tr ' ' '-' | # Replace spaces with hyphens
-    sed 's/^-//' | # Remove leading hyphen if any
-    sed 's/\/-/\//g' # Remove hyphen after / if any
-  )
-
-  git checkout -b $branch_name
-  git push origin $branch_name
-  gh pr create -t $1
-}
-
 # Main process.
 if   [[ "$1" == "" ]] || [[ "$1" == "help" ]] || [[ "$1" == "h" ]];        then cmd_directory $2
 elif [[ "$1" == "add" ]] || [[ "$1" == "a" ]];                             then cmd_add $2
@@ -673,7 +646,6 @@ elif [[ "$1" == "remove" ]] || [[ "$1" == "rm" ]] || [[ "$1" == "r" ]];    then 
 elif [[ "$1" == "project" ]] || [[ "$1" == "p" ]];                         then cmd_project $2
 elif [[ "$1" == "version" ]] || [[ "$1" == "-v" ]];                        then echo -e "v$VERSION"
 elif [[ "$1" == "gist" ]];                                                 then cmd_gist $2
-elif [[ "$1" == "pr" ]];                                                   then cmd_pr $2
 elif [[ "$1" == "tag" ]];                                                  then cmd_tag $2
 elif [[ "$1" == "untag" ]];                                                then cmd_untag $2
 else echo -e "${COLOR_BLUE}mu: ${COLOR_RESET}Unsupported command:" $1
