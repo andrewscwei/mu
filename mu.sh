@@ -218,6 +218,74 @@ function open_in_editor() {
   fi
 }
 
+# Scans a Git repo for uncommitted changes and unpushed commits.
+#
+# @param $1 Path to the Git repo, defaults to current directory.
+function git_status() {
+  local repo_path=${1:-$(pwd)}
+  local tags=""
+
+  # Check if directory is a Git repo
+  if ! git -C $repo_path rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    return
+  fi
+
+  # Check if there are uncommitted changes
+  if [[ -n $(git -C $repo_path status --porcelain) ]]; then
+    tags="${tags}${COLOR_RED}[uncommited]${COLOR_RESET}"
+  fi
+
+  # Fetch latest changes from remote
+  git -C $repo_path fetch > /dev/null 2>&1
+
+  # Check if remote has any commits
+  if ! git -C $repo_path rev-parse HEAD > /dev/null 2>&1; then
+    tags="${tags}${COLOR_ORANGE}[infant]${COLOR_RESET}"
+  elif git -C $repo_path symbolic-ref -q HEAD > /dev/null 2>&1; then
+    upstream='@{u}'
+    local_state=$(git -C $repo_path rev-parse @)
+    remote_state=$(git -C $repo_path rev-parse "$upstream")
+    base_state=$(git -C $repo_path merge-base @ "$upstream")
+
+    if [ $local_state = $remote_state ]; then
+      tags="${tags}${COLOR_GREEN}[synced]${COLOR_RESET}"
+    elif [ $local_state = $base_state ]; then
+      tags="${tags}${COLOR_CYAN}[pull]${COLOR_RESET}"
+    elif [ $remote_state = $base_state ]; then
+      tags="${tags}${COLOR_BLUE}[push]${COLOR_RESET}"
+    else
+      tags="${tags}${COLOR_RED}[diverged]${COLOR_RESET}"
+    fi
+  else
+    tags="${tags}${COLOR_RED}[detached]${COLOR_RESET}"
+  fi
+
+  if [[ "$tags" != "" ]]; then
+    echo "${tags} $repo_path"
+  fi
+}
+
+# Checks if a directory is ignored by .gitignore in any parent Git repos.
+#
+# @param $1 The directory to check.
+#
+# @returns 0 if the directory is ignored, 1 otherwise.
+function git_ignored() {
+  local dir=$1
+
+  while [[ "$dir" != "/" && -d "$dir" ]]; do
+    if [ -d "$dir/.git" ]; then
+      if git -C "$dir" check-ignore -q "${1}/"; then
+        return 0
+      fi
+    fi
+
+    dir=$(dirname "$dir")
+  done
+
+  return 1
+}
+
 # Shows the current cached project key.
 function cmd_cache() {
   get_cache
@@ -580,10 +648,12 @@ function cmd_directory() {
   echo -e "${COLOR_CYAN}  project${COLOR_RESET}  Opens a project in intended IDE (alias: ${COLOR_CYAN}p${COLOR_RESET})"
   echo -e "${COLOR_CYAN}  remove${COLOR_RESET}   Removes a project from the registry (aliases: ${COLOR_CYAN}rm${COLOR_RESET}, ${COLOR_CYAN}r${COLOR_RESET})"
   echo
-  echo -e "${BOLD}GitHub Commands:${BOLD_RESET}"
+  echo -e "${BOLD}Git Commands:${BOLD_RESET}"
   echo -e "${COLOR_CYAN}  gist${COLOR_RESET}     Downloads all files from a gist to the working directory"
   echo -e "${COLOR_CYAN}  tag${COLOR_RESET}      Creates a tag in both local and remote Git repository"
   echo -e "${COLOR_CYAN}  untag${COLOR_RESET}    Deletes a tag from both local and remote Git repository"
+  echo -e "${COLOR_CYAN}  changes${COLOR_RESET}  Scans for uncommitted changes and unpushed commits in all Git repos in the"
+  echo -e "           current directory (aliases: ${COLOR_CYAN}c${COLOR_RESET})"
 }
 
 # Downloads all files from a Gist to the working directory individually. This
@@ -634,6 +704,33 @@ function cmd_untag() {
   gh release delete $1 -y
 }
 
+# Scans for uncommitted changes and unpushed commits in all Git repos in the
+# current directory.
+#
+# @param $1 Path to the directory to scan.
+function cmd_changes() {
+  if [[ "$1" == "-h" ]]; then
+    echo -e "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}changes ${COLOR_PURPLE}<tag>${COLOR_RESET} (alias: ${COLOR_CYAN}c${COLOR_RESET})"
+    echo
+    echo -e "Scans for uncommitted changes and unpushed commits in all Git repos in the current"
+    echo -e "directory."
+    return
+  fi
+
+  local base_dir=$(pwd)
+
+  echo -e "${COLOR_BLUE}mu: ${COLOR_RESET}Scanning for uncommitted changes and unpushed commits in ${COLOR_CYAN}$base_dir${COLOR_RESET}..."
+  echo
+
+  find "$base_dir" -type d -name ".git" | while read -r res; do
+    repo_dir=$(dirname "$res")
+
+    if ! git_ignored "$repo_dir"; then
+      git_status $repo_dir
+    fi
+  done
+}
+
 # Main process.
 if   [[ "$1" == "" ]] || [[ "$1" == "help" ]] || [[ "$1" == "h" ]];        then cmd_directory $2
 elif [[ "$1" == "add" ]] || [[ "$1" == "a" ]];                             then cmd_add $2
@@ -649,6 +746,7 @@ elif [[ "$1" == "version" ]] || [[ "$1" == "-v" ]];                        then 
 elif [[ "$1" == "gist" ]];                                                 then cmd_gist $2
 elif [[ "$1" == "tag" ]];                                                  then cmd_tag $2
 elif [[ "$1" == "untag" ]];                                                then cmd_untag $2
+elif [[ "$1" == "changes" ]] || [[ "$1" == "c" ]];                         then cmd_changes $2
 else echo -e "${COLOR_BLUE}mu: ${COLOR_RESET}Unsupported command:" $1
 fi
 

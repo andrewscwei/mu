@@ -48,10 +48,12 @@ Main Commands:
   project  Opens a project in intended IDE (alias: p)
   remove   Removes a project from the registry (aliases: rm, r)
 
-GitHub Commands:
+Git Commands:
   gist     Downloads all files from a gist to the working directory
   tag      Creates a tag in both local and remote Git repository
   untag    Deletes a tag from both local and remote Git repository
+  changes  Scans for uncommitted changes and unpushed commits in all Git repos in the
+           current directory (aliases: c)
 ```
 
 ### `mu add <project_key>`
