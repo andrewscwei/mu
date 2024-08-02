@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/andrewscwei/mu/compare/v1.4.0...v1.4.1) (2024-08-02)
+
+
+### Bug Fixes
+
+* Remove `-e` ([4b91fac](https://github.com/andrewscwei/mu/commit/4b91fac6337b69b561debb2ac6abaaba637ac19f))
+
 # [1.4.0](https://github.com/andrewscwei/mu/compare/v1.3.0...v1.4.0) (2024-08-02)
 
 
