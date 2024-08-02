@@ -38,9 +38,9 @@ function install() {
   mkdir -p "$dest"
 
   if [ -f "$dest/mu.sh" ]; then
-    echo -e "${COLOR_BLUE}mu: mu ${COLOR_ORANGE}is already installed in ${COLOR_CYAN}$dest${COLOR_ORANGE}, updating it instead...${COLOR_RESET}"
+    echo "${COLOR_BLUE}mu: mu ${COLOR_ORANGE}is already installed in ${COLOR_CYAN}$dest${COLOR_ORANGE}, updating it instead...${COLOR_RESET}"
   else
-    echo -e "${COLOR_BLUE}mu: ${COLOR_RESET}Downloading ${COLOR_BLUE}mu${COLOR_RESET} to ${COLOR_CYAN}$dest${COLOR_RESET}"
+    echo "${COLOR_BLUE}mu: ${COLOR_RESET}Downloading ${COLOR_BLUE}mu${COLOR_RESET} to ${COLOR_CYAN}$dest${COLOR_RESET}"
   fi
 
   # Download the script.
@@ -85,34 +85,34 @@ function main() {
   fi
 
   if [[ "$bashprofile" == "" ]] && [[ "$zshprofile" == "" ]]; then
-    echo -e "${COLOR_BLUE}mu: ${COLOR_RESET}Bash profile not found, tried ${COLOR_CYAN}~/.bashrc${COLOR_RESET}, ${COLOR_CYAN}~/.zshrc${COLOR_RESET}, ${COLOR_CYAN}~/.profile${COLOR_RESET} and ${COLOR_CYAN}~/.bash_profile${COLOR_RESET}"
-    echo -e "     Create one of them and run this script again"
-    echo -e "     OR"
-    echo -e "     Append the following lines to the correct file yourself:"
-    echo -e "     ${COLOR_CYAN}${sourcestr}${COLOR_RESET}"
+    echo "${COLOR_BLUE}mu: ${COLOR_RESET}Bash profile not found, tried ${COLOR_CYAN}~/.bashrc${COLOR_RESET}, ${COLOR_CYAN}~/.zshrc${COLOR_RESET}, ${COLOR_CYAN}~/.profile${COLOR_RESET} and ${COLOR_CYAN}~/.bash_profile${COLOR_RESET}"
+    echo "     Create one of them and run this script again"
+    echo "     OR"
+    echo "     Append the following lines to the correct file yourself:"
+    echo "     ${COLOR_CYAN}${sourcestr}${COLOR_RESET}"
     exit 1
   fi
 
   if [[ "$bashprofile" != "" ]]; then
     if ! command grep -qc '/mu.sh' "$bashprofile"; then
-      echo -e "${COLOR_BLUE}mu: ${COLOR_RESET}Appending ${COLOR_BLUE}mu${COLOR_RESET} source string to ${COLOR_CYAN}$bashprofile${COLOR_RESET}"
+      echo "${COLOR_BLUE}mu: ${COLOR_RESET}Appending ${COLOR_BLUE}mu${COLOR_RESET} source string to ${COLOR_CYAN}$bashprofile${COLOR_RESET}"
       command printf "${sourcestr}" >> "$bashprofile"
     else
-      echo -e "${COLOR_BLUE}mu: mu ${COLOR_RESET}source string is already in ${COLOR_CYAN}$bashprofile${COLOR_RESET}"
+      echo "${COLOR_BLUE}mu: mu ${COLOR_RESET}source string is already in ${COLOR_CYAN}$bashprofile${COLOR_RESET}"
     fi
   fi
 
   if [[ "$zshprofile" != "" ]]; then
     if ! command grep -qc '/mu.sh' "$zshprofile"; then
-      echo -e "${COLOR_BLUE}mu: ${COLOR_RESET}Appending ${COLOR_BLUE}mu${COLOR_RESET} source string to ${COLOR_CYAN}$zshprofile${COLOR_RESET}"
+      echo "${COLOR_BLUE}mu: ${COLOR_RESET}Appending ${COLOR_BLUE}mu${COLOR_RESET} source string to ${COLOR_CYAN}$zshprofile${COLOR_RESET}"
       command printf "${sourcestr}" >> "$zshprofile"
     else
-      echo -e "${COLOR_BLUE}mu: mu ${COLOR_RESET}source string is already in ${COLOR_CYAN}$zshprofile${COLOR_RESET}"
+      echo "${COLOR_BLUE}mu: mu ${COLOR_RESET}source string is already in ${COLOR_CYAN}$zshprofile${COLOR_RESET}"
     fi
   fi
 
   echo
-  echo -e "${COLOR_BLUE}mu: ${COLOR_GREEN}All done!${COLOR_RESET}"
+  echo "${COLOR_BLUE}mu: ${COLOR_GREEN}All done!${COLOR_RESET}"
 
   # Source mu
   \. "$dest/mu.sh"
