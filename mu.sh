@@ -9,7 +9,7 @@
 { # This ensures the entire script is downloaded #
 
 # Config.
-VERSION="1.3.0"
+VERSION="1.4.0"
 
 # Colors.
 FMT_PREFIX="\x1b["

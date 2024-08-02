@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/andrewscwei/mu/compare/v1.3.0...v1.4.0) (2024-08-02)
+
+
+### Features
+
+* Add `changes` command ([fab5c7d](https://github.com/andrewscwei/mu/commit/fab5c7de4c54430d76bc56f65b82247b79065481))
+
 # [1.3.0](https://github.com/andrewscwei/mu/compare/v1.2.0...v1.3.0) (2024-07-16)
 
 

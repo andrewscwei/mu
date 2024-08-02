@@ -3,7 +3,7 @@
 { # This ensures the entire script is downloaded
 
 # Config.
-VERSION="1.3.0"
+VERSION="1.4.0"
 SOURCE=https://raw.githubusercontent.com/andrewscwei/mu/v$VERSION/mu.sh
 
 # Colors.
