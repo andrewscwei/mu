@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/andrewscwei/mu/compare/v1.4.1...v1.5.0) (2025-03-12)
+
+
+### Features
+
+* Support VSCode multi-root workspace ([7780796](https://github.com/andrewscwei/mu/commit/778079601eb6902f83920721b461056bd1057caf))
+
 ## [1.4.1](https://github.com/andrewscwei/mu/compare/v1.4.0...v1.4.1) (2024-08-02)
 
 
