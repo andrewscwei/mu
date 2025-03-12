@@ -585,28 +585,41 @@ function cmd_project() {
   if [[ "$TMP_PROJECT_ALIAS" != "" ]]; then
     TARGET_PROJECT_FILE=""
 
+    # Scan for project files.
     for file in "$TMP_PROJECT_PATH"/*; do
-      # If *.xcworkspace file is found, use it immediately.
+      # If Android Studio project is found, open it immediately.
+      if [[ "$file" == *".gradle" ]]; then
+        echo "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Android Studio project, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_PURPLE}Android Studio${COLOR_RESET}"
+
+        set_cache $TMP_PROJECT_ALIAS
+        open -a /Applications/Android\ Studio.app $TMP_PROJECT_PATH
+
+        return
+      fi
+
+      # Set if Xcode workspace is found.
       if [[ "$file" == *"xcworkspace" ]]; then
         TARGET_PROJECT_FILE="$file"
-        break
-        # If *.xcodeproj is found, store it temporarily until another
-        # project file with higher priority is found.
+
+      # Set if Xcode project is found and no precedence exists.
       elif [[ "$file" == *"xcodeproj" ]]; then
         if [[ "$TARGET_PROJECT_FILE" != *"xcworkspace" ]]; then
           TARGET_PROJECT_FILE="$file"
         fi
-        # If *.sublime-project is found, store it temporarily until another
-        # project file with higher priority is found.
-      elif [[ "$file" == *".gradle" ]]; then
-        echo "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Android Studio project, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_PURPLE}Android Studio${COLOR_RESET}"
-        open -a /Applications/Android\ Studio.app $TMP_PROJECT_PATH
-        return
-      elif [[ "$file" == *"sublime-project" ]]; then
+
+      # Set if VSCode multi-root workspace is found and no precedence exists.
+      elif [[ "$file" == *"code-workspace" ]]; then
         if [[ "$TARGET_PROJECT_FILE" != *"xcworkspace" ]] && [[ "$TARGET_PROJECT_FILE" != *"xcodeproj" ]]; then
           TARGET_PROJECT_FILE="$file"
         fi
+
+      # Set if Sublime project is found and no precedence exists.
+      elif [[ "$file" == *"sublime-project" ]]; then
+        if [[ "$TARGET_PROJECT_FILE" != *"xcworkspace" ]] && [[ "$TARGET_PROJECT_FILE" != *"xcodeproj" ]] && [[ "$TARGET_PROJECT_FILE" != *"code-workspace" ]]; then
+          TARGET_PROJECT_FILE="$file"
+        fi
       fi
+
     done
 
     if [[ "$TARGET_PROJECT_FILE" != "" ]]; then
@@ -616,6 +629,8 @@ function cmd_project() {
         echo "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Xcode workspace, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_PURPLE}Xcode${COLOR_RESET}"
       elif [[ "$TARGET_PROJECT_FILE" == *"xcodeproj" ]]; then
         echo "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Xcode project, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_PURPLE}Xcode${COLOR_RESET}"
+      elif [[ "$TARGET_PROJECT_FILE" == *"code-workspace" ]]; then
+        echo "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found VSCode multi-root workspace, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_PURPLE}VSCode${COLOR_RESET}"
       elif [[ "$TARGET_PROJECT_FILE" == *"sublime-project" ]]; then
         echo "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Sublime project, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_PURPLE}Sublime${COLOR_RESET}"
       fi
@@ -630,7 +645,11 @@ function cmd_project() {
     return
   fi
 
-  echo "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Project with reference ${COLOR_PURPLE}$2${COLOR_RESET} not found"
+  if [[ $2 == "" ]]; then
+    echo "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Invalid project reference provided"
+  else
+    echo "${COLOR_BLUE}mu: ${COLOR_RED}ERR! ${COLOR_RESET}Project with reference ${COLOR_PURPLE}$2${COLOR_RESET} not found"
+  fi
 }
 
 # Displays the directory.
