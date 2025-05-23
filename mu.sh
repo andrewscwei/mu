@@ -387,7 +387,7 @@ function cmd_clean() {
   if [[ "$1" == "-h" ]]; then
     echo "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}clean${COLOR_RESET}"
     echo
-    echo "Scans the registry and reconsiles invalid project entries."
+    echo "Scans the registry and reconciles invalid project entries."
     return
   fi
 
@@ -586,7 +586,7 @@ function cmd_project() {
     TARGET_PROJECT_FILE=""
 
     # Scan for project files.
-    for file in "$TMP_PROJECT_PATH"/*; do
+    for file in "$TMP_PROJECT_PATH"/{.,}*; do
       # If Android Studio project is found, open it immediately.
       if [[ "$file" == *".gradle" ]]; then
         echo "${COLOR_BLUE}mu: ${COLOR_GREEN}OK ${COLOR_RESET}Found Android Studio project, opening project ${COLOR_PURPLE}$TMP_PROJECT_ALIAS${COLOR_RESET} with ${COLOR_PURPLE}Android Studio${COLOR_RESET}"
@@ -671,7 +671,7 @@ function cmd_directory() {
   echo "${COLOR_CYAN}  gist${COLOR_RESET}     Downloads all files from a gist to the working directory"
   echo "${COLOR_CYAN}  tag${COLOR_RESET}      Creates a tag in both local and remote Git repository"
   echo "${COLOR_CYAN}  untag${COLOR_RESET}    Deletes a tag from both local and remote Git repository"
-  echo "${COLOR_CYAN}  changes${COLOR_RESET}  Scans for uncommitted changes and unpushed commits in all Git repos in the"
+  echo "${COLOR_CYAN}  diff${COLOR_RESET}     Scans for uncommitted changes and unpushed commits in all Git repos in the"
   echo "           current directory (aliases: ${COLOR_CYAN}c${COLOR_RESET})"
 }
 
@@ -727,9 +727,9 @@ function cmd_untag() {
 # current directory.
 #
 # @param $1 Path to the directory to scan.
-function cmd_changes() {
+function cmd_diff() {
   if [[ "$1" == "-h" ]]; then
-    echo "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}changes ${COLOR_PURPLE}<tag>${COLOR_RESET} (alias: ${COLOR_CYAN}c${COLOR_RESET})"
+    echo "${BOLD}Help: ${COLOR_BLUE}mu ${COLOR_CYAN}diff ${COLOR_PURPLE}<tag>${COLOR_RESET} (alias: ${COLOR_CYAN}c${COLOR_RESET})"
     echo
     echo "Scans for uncommitted changes and unpushed commits in all Git repos in the current"
     echo "directory."
@@ -765,7 +765,7 @@ elif [[ "$1" == "version" ]] || [[ "$1" == "-v" ]];                        then 
 elif [[ "$1" == "gist" ]];                                                 then cmd_gist $2
 elif [[ "$1" == "tag" ]];                                                  then cmd_tag $2
 elif [[ "$1" == "untag" ]];                                                then cmd_untag $2
-elif [[ "$1" == "changes" ]] || [[ "$1" == "c" ]];                         then cmd_changes $2
+elif [[ "$1" == "diff" ]];                                                 then cmd_diff $2
 else echo "${COLOR_BLUE}mu: ${COLOR_RESET}Unsupported command:" $1
 fi
 
