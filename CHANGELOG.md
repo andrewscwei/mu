@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/andrewscwei/mu/compare/v1.5.0...v2.0.0) (2025-05-23)
+
+
+### Bug Fixes
+
+* Fix identifying projects as Android Studio projects ([dfc7c0a](https://github.com/andrewscwei/mu/commit/dfc7c0ab83f5050039dbd919a08982aa1f208f55))
+
+
+### BREAKING CHANGES
+
+* Changed `changes` command to `diff`
+
 # [1.5.0](https://github.com/andrewscwei/mu/compare/v1.4.1...v1.5.0) (2025-03-12)
 
 
